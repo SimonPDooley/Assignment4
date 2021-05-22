@@ -2,3 +2,5 @@
 /User.class
 /UserLoginApplication.class
 /UserService.class
+/NormalUser.class
+/SuperUser.class

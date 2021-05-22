@@ -31,20 +31,22 @@ public class SuperUserService extends UserService {
 							keepGuessing = false;
 							System.out.println("Welcome: " + users[i].getName());
 							System.out.println("----------------------------------");
-							System.out.println(users[i].getRole());
-							if (users[i].getRole().equals("normal_user")) {
+							if (users[i] instanceof NormalUser) {
 								UserService userService = new UserService();
 								users[i] = userService.userOptions(users[i]);
 								System.out.println(users[i].getName());
 								makingChanges = false;
 							} else {
-								users[i] = userOptions(users[i]);
+								SuperUserService superUserService = new SuperUserService();
+								users[i] = superUserService.userOptions(users[i], users);
 								System.out.println(users[i].getName());
 								makingChanges = false;
 							}
 						}
 					}
-					System.out.println("Invalid username, please try again");
+					if(keepGuessing == true) {
+						System.out.println("Invalid username, please try again");
+					}
 				}
 			} else if (option.equals("1")) {
 				System.out.println("Please enter your new username");

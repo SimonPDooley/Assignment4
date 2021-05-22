@@ -31,7 +31,11 @@ public class UserLoginApplication {
 			for (int i = 0; i < users.length; i++) {
 				line = fileReader.readLine();
 				usersParsed = line.split(", ");
-				users[i] = new User(usersParsed[0], usersParsed[1], usersParsed[2], usersParsed[3]);
+				if (usersParsed[3].equals("super_user")) {
+					users[i] = new SuperUser(usersParsed[0], usersParsed[1], usersParsed[2]);
+				} else {
+					users[i] = new NormalUser(usersParsed[0], usersParsed[1], usersParsed[2]);
+				}
 			}
 
 		} catch (FileNotFoundException e) {
@@ -65,15 +69,12 @@ public class UserLoginApplication {
 						System.out.println("Welcome: " + users[i].getName());
 						System.out.println("----------------------------------");
 						loggedIn = true;
-						if (users[i].getRole().equals("normal_user")) {
+						if (users[i] instanceof NormalUser) {
 							users[i] = userService.userOptions(users[i]);
 							Arrays.sort(users);
 						} else {
 							users[i] = superUserService.userOptions(users[i], users);
 							Arrays.sort(users);
-							for (int w = 0; w < users.length; w++) {
-								System.out.println(users[w].getName());
-							}
 						}
 					}
 				}
@@ -85,8 +86,13 @@ public class UserLoginApplication {
 			}
 
 		} finally {
-			scanner.close();
-			fileReader.close();
+			System.out.println("---------------------------");
+			System.out.println("List off all users sorted: ");
+			for (int w = 0; w < users.length; w++) {
+				System.out.println(users[w].getName());
+				scanner.close();
+				fileReader.close();
+			}
 		}
 		if (loggedIn == false) {
 			System.out.println("Too many failed login attempts, you are now locked out.");
